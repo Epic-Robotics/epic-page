@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom';
+
 function Footer() {
   return (
-    <footer className="bg-base-200 ">
+    <footer className="bg-base-200 mt-auto">
       <div className="footer p-10 text-base-content max-w-7xl mx-auto flex">
         <aside>
           <h6 className="footer-title">Epic Robotics</h6>
@@ -11,20 +13,23 @@ function Footer() {
           </p>
         </aside>
         <nav>
-          <h6 className="footer-title">Productos</h6>
-          <a className="link link-hover">Caracteristicas</a>
-          <a className="link link-hover">Precios</a>
+          <h6 className="footer-title">Paginas</h6>
+          <Link to="/" className="link link-hover">Inicio</Link>
+          <Link to="/about" className="link link-hover">Sobre Nosotros</Link>
+          <Link to="/services" className="link link-hover">Servicios</Link>
+          <Link to="/contact" className="link link-hover">Contacto</Link>
         </nav>
         <nav>
-          <h6 className="footer-title">Resources</h6>
-          <a className="link link-hover">Documentación</a>
+          <h6 className="footer-title">Recursos</h6>
+          <a className="link link-hover">Documentacion</a>
           <a className="link link-hover">Tutoriales</a>
+          <a className="link link-hover">Blog</a>
         </nav>
         <nav>
-          <h6 className="footer-title">Company</h6>
-          <a className="link link-hover">Acerca de nosotros</a>
-          {/* <a className="link link-hover">Careers</a> */}
-          <a className="link link-hover">Contactos</a>
+          <h6 className="footer-title">Legal</h6>
+          <a className="link link-hover">Terminos de Uso</a>
+          <a className="link link-hover">Politica de Privacidad</a>
+          <a className="link link-hover">Cookies</a>
         </nav>
       </div>
 
