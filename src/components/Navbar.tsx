@@ -1,6 +1,17 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
 
 function Navbar() {
+  const { user, isAuthenticated, logout } = useAuth();
+
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
   return (
     <div className="navbar bg-base-100 shadow-lg px-4 lg:px-8">
       {/* logo */}
@@ -27,15 +38,52 @@ function Navbar() {
             <Link to="/about">Sobre Nosotros</Link>
           </li>
           <li>
+            <Link to="/cursos">Cursos</Link>
+          </li>
+          <li>
             <Link to="/services">Servicios</Link>
           </li>
           <li>
             <Link to="/contact">Contacto</Link>
           </li>
         </ul>
-        <Link to="/contact" className="btn btn-primary ml-4">
-          Comienza Ahora
-        </Link>
+
+        {/* Auth Section */}
+        {isAuthenticated && user ? (
+          <div className="dropdown dropdown-end ml-4">
+            <label tabIndex={0} className="btn btn-ghost btn-circle avatar">
+              <div className="w-10 rounded-full bg-primary text-primary-content flex items-center justify-center">
+                <span className="text-lg font-bold">
+                  {user.profileData.name?.charAt(0).toUpperCase() || 'U'}
+                </span>
+              </div>
+            </label>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+            >
+              <li className="menu-title">
+                <span>{user.profileData.name}</span>
+                <span className="text-xs text-base-content/60">
+                  {user.email}
+                </span>
+              </li>
+              <li>
+                <Link to="/profile">Mi Perfil</Link>
+              </li>
+              <li>
+                <Link to="/my-courses">Mis Cursos</Link>
+              </li>
+              <li>
+                <button onClick={handleLogout}>Cerrar Sesión</button>
+              </li>
+            </ul>
+          </div>
+        ) : (
+          <Link to="/login" className="btn btn-primary ml-4">
+            Login
+          </Link>
+        )}
       </div>
       {/* Mobile menu */}
       <div className="flex-none lg:hidden">
@@ -67,19 +115,43 @@ function Navbar() {
               <Link to="/about">Sobre Nosotros</Link>
             </li>
             <li>
+              <Link to="/cursos">Cursos</Link>
+            </li>
+            <li>
               <Link to="/services">Servicios</Link>
             </li>
             <li>
               <Link to="/contact">Contacto</Link>
             </li>
-            <li>
-              <Link
-                to="/contact"
-                className="btn btn-primary btn-sm mt-2 w-full"
-              >
-                Comienza Ahora
-              </Link>
-            </li>
+
+            {/* Mobile Auth Section */}
+            {isAuthenticated && user ? (
+              <>
+                <li className="menu-title mt-2">
+                  <span>{user.profileData.name}</span>
+                </li>
+                <li>
+                  <Link to="/profile">Mi Perfil</Link>
+                </li>
+                <li>
+                  <Link to="/my-courses">Mis Cursos</Link>
+                </li>
+                <li>
+                  <button onClick={handleLogout} className="text-error">
+                    Cerrar Sesión
+                  </button>
+                </li>
+              </>
+            ) : (
+              <li>
+                <Link
+                  to="/login"
+                  className="btn btn-primary btn-sm mt-2 w-full"
+                >
+                  Login
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </div>
