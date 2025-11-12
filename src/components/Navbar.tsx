@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+import { getRoleBadgeColor, getRoleText, getRoleIcon } from '../utils/roleUtils';
 
 function Navbar() {
   const { user, isAuthenticated, logout } = useAuth();
@@ -63,19 +64,47 @@ function Navbar() {
               className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
             >
               <li className="menu-title">
-                <span>{user.profileData.name}</span>
-                <span className="text-xs text-base-content/60">
-                  {user.email}
-                </span>
+                <div className="flex flex-col gap-1">
+                  <div className="flex items-center gap-2">
+                    <span>{user.profileData.name}</span>
+                    <span className={`badge ${getRoleBadgeColor(user.role)} badge-sm`}>
+                      {getRoleIcon(user.role)} {getRoleText(user.role)}
+                    </span>
+                  </div>
+                  <span className="text-xs text-base-content/60">
+                    {user.email}
+                  </span>
+                </div>
               </li>
               <li>
-                <Link to="/profile">Mi Perfil</Link>
+                <Link to="/profile">
+                  <span>👤</span> Mi Perfil
+                </Link>
               </li>
               <li>
-                <Link to="/my-courses">Mis Cursos</Link>
+                <Link to="/my-courses">
+                  <span>📚</span> Mis Cursos
+                </Link>
               </li>
+              {user.role === 'INSTRUCTOR' && (
+                <li>
+                  <Link to="/instructor/courses">
+                    <span>🎓</span> Gestionar Cursos
+                  </Link>
+                </li>
+              )}
+              {user.role === 'ADMIN' && (
+                <li>
+                  <Link to="/admin/productos">
+                    <span>👑</span> Gestionar Productos
+                  </Link>
+                </li>
+              )}
+              <div className="divider my-1"></div>
               <li>
-                <button onClick={handleLogout}>Cerrar Sesión</button>
+                <button onClick={handleLogout} className="text-error">
+                  <span>🚪</span> Cerrar Sesión
+                </button>
               </li>
             </ul>
           </div>
@@ -127,18 +156,44 @@ function Navbar() {
             {/* Mobile Auth Section */}
             {isAuthenticated && user ? (
               <>
+                <div className="divider my-1"></div>
                 <li className="menu-title mt-2">
-                  <span>{user.profileData.name}</span>
+                  <div className="flex flex-col gap-1">
+                    <div className="flex items-center gap-2">
+                      <span>{user.profileData.name}</span>
+                      <span className={`badge ${getRoleBadgeColor(user.role)} badge-xs`}>
+                        {getRoleIcon(user.role)} {getRoleText(user.role)}
+                      </span>
+                    </div>
+                  </div>
                 </li>
                 <li>
-                  <Link to="/profile">Mi Perfil</Link>
+                  <Link to="/profile">
+                    <span>👤</span> Mi Perfil
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/my-courses">Mis Cursos</Link>
+                  <Link to="/my-courses">
+                    <span>📚</span> Mis Cursos
+                  </Link>
                 </li>
+                {user.role === 'INSTRUCTOR' && (
+                  <li>
+                    <Link to="/instructor/courses">
+                      <span>🎓</span> Gestionar Cursos
+                    </Link>
+                  </li>
+                )}
+                {user.role === 'ADMIN' && (
+                  <li>
+                    <Link to="/admin/productos">
+                      <span>👑</span> Gestionar Productos
+                    </Link>
+                  </li>
+                )}
                 <li>
                   <button onClick={handleLogout} className="text-error">
-                    Cerrar Sesión
+                    <span>🚪</span> Cerrar Sesión
                   </button>
                 </li>
               </>

@@ -1,4 +1,5 @@
-import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
+import type { ReactNode } from 'react';
 import { authService } from '../api/services';
 import type { User, AuthResponse } from '../types/api';
 import type { LoginCredentials, RegisterData } from '../api/services/auth.service';
@@ -57,13 +58,27 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const login = async (credentials: LoginCredentials): Promise<AuthResponse> => {
     const response = await authService.login(credentials);
-    setUser(response.user);
+    // Fetch complete user profile after login
+    try {
+      const userData = await authService.getProfile();
+      setUser(userData);
+    } catch (error) {
+      console.error('Failed to fetch profile after login:', error);
+      setUser(response.user); // Fallback to response user
+    }
     return response;
   };
 
   const register = async (data: RegisterData): Promise<AuthResponse> => {
     const response = await authService.register(data);
-    setUser(response.user);
+    // Fetch complete user profile after registration
+    try {
+      const userData = await authService.getProfile();
+      setUser(userData);
+    } catch (error) {
+      console.error('Failed to fetch profile after registration:', error);
+      setUser(response.user); // Fallback to response user
+    }
     return response;
   };
 

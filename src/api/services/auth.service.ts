@@ -1,5 +1,5 @@
 import apiClient, { TokenStorage } from '../client';
-import type { AuthResponse, User } from '../../types/api';
+import type { AuthResponse, User, UpdateInstructorProfileRequest, EnrolledCourse, Instructor } from '../../types/api';
 
 export interface LoginCredentials {
   email: string;
@@ -118,6 +118,34 @@ export const authService = {
     const response = await apiClient.delete<{ message: string; deletedUserId: string; deletedEmail: string }>('/users/me');
     TokenStorage.remove();
     return response;
+  },
+
+  /**
+   * Make a user an instructor (admin only)
+   */
+  makeInstructor: async (userId: string, data: UpdateInstructorProfileRequest): Promise<Instructor> => {
+    return apiClient.post<Instructor>(`/users/${userId}/make-instructor`, data);
+  },
+
+  /**
+   * Update instructor profile
+   */
+  updateInstructorProfile: async (data: UpdateInstructorProfileRequest): Promise<Instructor> => {
+    return apiClient.put<Instructor>('/users/instructor-profile', data);
+  },
+
+  /**
+   * Get enrolled courses
+   */
+  getEnrolledCourses: async (): Promise<EnrolledCourse[]> => {
+    return apiClient.get<EnrolledCourse[]>('/users/enrolled-courses');
+  },
+
+  /**
+   * Delete any user (admin only)
+   */
+  deleteUser: async (userId: string): Promise<{ message: string }> => {
+    return apiClient.delete<{ message: string }>(`/users/${userId}`);
   },
 };
 

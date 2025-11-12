@@ -1,5 +1,5 @@
 import apiClient from '../client';
-import type { Course, Section, UserProgress, QuizAttemptResponse, CourseLevel } from '../../types/api';
+import type { Course, Section, UserProgress, QuizAttemptResponse, CourseLevel, AccessLink, Review, CreateReviewRequest } from '../../types/api';
 
 export interface CourseFilters {
   category?: string;
@@ -143,6 +143,34 @@ export const courseService = {
    */
   getEnrolledCourses: async (): Promise<Course[]> => {
     return apiClient.get<Course[]>('/users/enrolled-courses');
+  },
+
+  /**
+   * Generate access link for course (instructor: own courses / admin: any course)
+   */
+  generateAccessLink: async (courseId: string, maxUses?: number, expiresAt?: string): Promise<AccessLink> => {
+    return apiClient.post<AccessLink>(`/courses/${courseId}/access-links`, { maxUses, expiresAt });
+  },
+
+  /**
+   * Get access links for course (instructor: own courses / admin: any course)
+   */
+  getCourseAccessLinks: async (courseId: string): Promise<AccessLink[]> => {
+    return apiClient.get<AccessLink[]>(`/courses/${courseId}/access-links`);
+  },
+
+  /**
+   * Get reviews for a course
+   */
+  getCourseReviews: async (courseId: string): Promise<Review[]> => {
+    return apiClient.get<Review[]>(`/courses/${courseId}/reviews`);
+  },
+
+  /**
+   * Update course review
+   */
+  updateReview: async (courseId: string, data: CreateReviewRequest): Promise<Review> => {
+    return apiClient.post<Review>(`/courses/${courseId}/review`, data);
   },
 };
 

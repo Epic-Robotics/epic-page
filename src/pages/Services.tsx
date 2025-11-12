@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 function Services() {
   return (
     <div className="min-h-screen bg-base-200">
@@ -22,7 +24,9 @@ function Services() {
                 con videos, ejercicios prácticos y proyectos.
               </p>
               <div className="card-actions justify-end">
-                <button className="btn btn-primary">Ver Cursos</button>
+                <Link to="/cursos" className="btn btn-primary">
+                  Ver Cursos
+                </Link>
               </div>
             </div>
           </div>
@@ -61,7 +65,9 @@ function Services() {
                 nivel de aprendizaje.
               </p>
               <div className="card-actions justify-end">
-                <button className="btn btn-primary">Explorar</button>
+                <Link to="/productos" className="btn btn-primary">
+                  Explorar
+                </Link>
               </div>
             </div>
           </div>

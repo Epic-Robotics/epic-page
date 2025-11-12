@@ -320,6 +320,208 @@ export interface AccessLinkInfo {
   expiresAt?: string;
 }
 
+// Request Types
+export interface UpdateProfileRequest {
+  name?: string;
+  avatar?: string;
+  bio?: string;
+  phone?: string;
+}
+
+export interface UpdatePasswordRequest {
+  currentPassword: string;
+  newPassword: string;
+}
+
+export interface UpdateInstructorProfileRequest {
+  bio: string;
+  expertise: string[];
+  socialLinks?: {
+    twitter?: string;
+    linkedin?: string;
+    website?: string;
+  };
+}
+
+export interface CreateCourseRequest {
+  title: string;
+  description: string;
+  price: number;
+  category: string;
+  level: CourseLevel;
+  thumbnail?: string;
+  language: string;
+  whatYouWillLearn?: string[];
+  previewVideoUrl?: string;
+}
+
+export interface UpdateCourseRequest extends Partial<CreateCourseRequest> {
+  status?: CourseStatus;
+}
+
+export interface CreateReviewRequest {
+  rating: number;
+  comment: string;
+}
+
+export interface Review {
+  id: string;
+  userId: string;
+  courseId: string;
+  rating: number;
+  comment: string;
+  user: {
+    profileData: {
+      name: string;
+      avatar?: string;
+    };
+  };
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface UpdateProgressRequest {
+  lessonId: string;
+  completed: boolean;
+}
+
+export interface ProgressUpdateResponse {
+  lessonProgress: {
+    id: string;
+    lessonId: string;
+    completed: boolean;
+    completedAt?: string;
+  };
+  courseProgress: {
+    progress: number;
+    completedLessons: number;
+    totalLessons: number;
+  };
+}
+
+export interface QuizAttemptRequest {
+  answers: number[];
+}
+
+export interface CreateLearningPathRequest {
+  title: string;
+  description: string;
+  thumbnail?: string;
+  difficulty: CourseLevel;
+  orderIndex: number;
+  isPublished: boolean;
+}
+
+export interface UpdateLearningPathRequest extends Partial<CreateLearningPathRequest> {}
+
+export interface AddCourseToPathRequest {
+  courseId: string;
+  orderInPath: number;
+}
+
+export interface ReorderCoursesRequest {
+  courseOrders: {
+    courseId: string;
+    orderInPath: number;
+  }[];
+}
+
+export interface CreateProductRequest {
+  title: string;
+  description: string;
+  imageUrl?: string;
+  isPublished: boolean;
+  orderIndex: number;
+}
+
+export interface UpdateProductRequest extends Partial<CreateProductRequest> {}
+
+export interface CreateFeatureRequest {
+  subtitle: string;
+  subDescription: string;
+  orderIndex: number;
+}
+
+export interface UpdateFeatureRequest extends Partial<CreateFeatureRequest> {}
+
+export interface ReorderFeaturesRequest {
+  featureOrders: {
+    featureId: string;
+    orderIndex: number;
+  }[];
+}
+
+export interface CreateAvailabilityRequest {
+  dayOfWeek: DayOfWeek;
+  startTime: string;
+  endTime: string;
+  isActive: boolean;
+}
+
+export interface UpdateAvailabilityRequest extends Partial<CreateAvailabilityRequest> {}
+
+export interface BookSessionRequest {
+  instructorId: string;
+  scheduledAt: string;
+  duration: number;
+  topic: string;
+}
+
+export interface UpdateSessionRequest {
+  status?: SessionStatus;
+  meetingLink?: string;
+  instructorNotes?: string;
+  studentNotes?: string;
+}
+
+export interface CreateContactRequest {
+  name: string;
+  email: string;
+  subject: string;
+  message: string;
+}
+
+export interface UpdateContactRequest {
+  status: InquiryStatus;
+}
+
+export interface CheckoutRequest {
+  courseId: string;
+}
+
+export interface CreateSubscriptionRequest {
+  planId: string;
+}
+
+export interface Subscription {
+  id: string;
+  userId: string;
+  planId: string;
+  status: 'ACTIVE' | 'CANCELLED' | 'EXPIRED';
+  startDate: string;
+  endDate?: string;
+  createdAt: string;
+}
+
+export interface EnrolledCourse extends Course {
+  enrolledAt: string;
+  progress: number;
+  completionStatus: CompletionStatus;
+}
+
+export interface CourseWithProgress extends Course {
+  sections: Section[];
+  enrollment: {
+    enrolledAt: string;
+    progress: number;
+  };
+  lessonProgress: {
+    lessonId: string;
+    completed: boolean;
+    completedAt?: string;
+  }[];
+}
+
 // API Error Response
 export interface ApiError {
   error: string;

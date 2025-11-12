@@ -10,6 +10,10 @@ import CarlosMenacho from './pages/CarlosMenacho';
 import Login from './pages/Login';
 import Courses from './pages/Courses';
 import CourseDetail from './pages/CourseDetail';
+import Profile from './pages/Profile';
+import Products from './pages/Products';
+import ProductDetail from './pages/ProductDetail';
+import AdminProducts from './pages/AdminProducts';
 
 // Todo
 // complete routing
@@ -27,8 +31,12 @@ function App() {
             <Route path="/cursos" element={<Courses />} />
             <Route path="/cursos/:id" element={<CourseDetail />} />
             <Route path="/services" element={<Services />} />
+            <Route path="/productos" element={<Products />} />
+            <Route path="/productos/:id" element={<ProductDetail />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/admin/productos" element={<AdminProducts />} />
           </Routes>
         </main>
         <Footer />

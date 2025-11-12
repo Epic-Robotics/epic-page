@@ -24,7 +24,7 @@ export default function Courses() {
     try {
       const data = await courseService.getCourses({
         category: filters.category || undefined,
-        level: filters.level as any || undefined,
+        level: (filters.level as any) || undefined,
         search: filters.search || undefined,
       });
       setCourses(data);
@@ -90,9 +90,11 @@ export default function Courses() {
                 >
                   <option value="">Todas las categorías</option>
                   <option value="Programming">Programación</option>
-                  <option value="Design">Diseño</option>
-                  <option value="Business">Negocios</option>
-                  <option value="Marketing">Marketing</option>
+                  <option value="Computer Vision">Visión Artificial</option>
+                  <option value="Artifitial Intelligence">
+                    Inteligencia Artificial
+                  </option>
+                  <option value="Math">Matemáticas</option>
                   <option value="Data Science">Ciencia de Datos</option>
                 </select>
               </div>
@@ -277,10 +279,7 @@ function CourseCard({ course }: { course: Course }) {
           <div className="text-2xl font-bold text-primary">
             ${Number(course.price).toFixed(2)}
           </div>
-          <Link
-            to={`/cursos/${course.id}`}
-            className="btn btn-primary btn-sm"
-          >
+          <Link to={`/cursos/${course.id}`} className="btn btn-primary btn-sm">
             Ver Curso
           </Link>
         </div>
