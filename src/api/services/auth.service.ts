@@ -112,6 +112,13 @@ export const authService = {
   },
 
   /**
+   * Get all users (admin only)
+   */
+  getAllUsers: async (): Promise<User[]> => {
+    return apiClient.get<User[]>('/users');
+  },
+
+  /**
    * Delete current user account
    */
   deleteAccount: async (): Promise<{ message: string; deletedUserId: string; deletedEmail: string }> => {

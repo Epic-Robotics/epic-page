@@ -14,6 +14,11 @@ import Profile from './pages/Profile';
 import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
 import AdminProducts from './pages/AdminProducts';
+import AdminUsers from './pages/AdminUsers';
+import ManageCourses from './pages/ManageCourses';
+import MyCourses from './pages/MyCourses';
+import Learn from './pages/Learn';
+import RedeemAccessLink from './pages/RedeemAccessLink';
 
 // Todo
 // complete routing
@@ -36,7 +41,12 @@ function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/login" element={<Login />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/my-courses" element={<MyCourses />} />
+            <Route path="/learn/:courseId" element={<Learn />} />
+            <Route path="/redeem/:token" element={<RedeemAccessLink />} />
+            <Route path="/manage/courses" element={<ManageCourses />} />
             <Route path="/admin/productos" element={<AdminProducts />} />
+            <Route path="/admin/usuarios" element={<AdminUsers />} />
           </Routes>
         </main>
         <Footer />

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { productService } from '../api/services';
-import type { Product, ProductFeature, ApiError } from '../types/api';
+import type { Product, ApiError } from '../types/api';
 import { Navigate } from 'react-router-dom';
 
 export default function AdminProducts() {
@@ -41,7 +41,7 @@ export default function AdminProducts() {
   const loadProducts = async () => {
     try {
       setLoading(true);
-      const data = await productService.getProducts();
+      const data = await productService.getProducts(true); // Include all products (drafts and published)
       setProducts(data);
     } catch (err) {
       const apiError = err as ApiError;
@@ -108,7 +108,7 @@ export default function AdminProducts() {
       resetFeatureForm();
       await loadProducts();
       // Refresh the managingFeatures with updated product
-      const updatedProducts = await productService.getProducts();
+      const updatedProducts = await productService.getProducts(true);
       const updatedProduct = updatedProducts.find(p => p.id === managingFeatures.id);
       if (updatedProduct) {
         setManagingFeatures(updatedProduct);
@@ -129,7 +129,7 @@ export default function AdminProducts() {
       setSuccess('Caracteristica eliminada exitosamente');
       await loadProducts();
       // Refresh the managingFeatures with updated product
-      const updatedProducts = await productService.getProducts();
+      const updatedProducts = await productService.getProducts(true);
       const updatedProduct = updatedProducts.find(p => p.id === managingFeatures.id);
       if (updatedProduct) {
         setManagingFeatures(updatedProduct);

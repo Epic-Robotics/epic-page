@@ -12,6 +12,11 @@ export interface User {
     phone?: string;
     [key: string]: unknown;
   };
+  instructor?: {
+    id: string;
+    bio: string;
+    expertise: string[];
+  };
   createdAt: string;
   updatedAt?: string;
 }
@@ -292,7 +297,11 @@ export interface AccessLink {
   courseId: string;
   courseTitle?: string;
   isUsed: boolean;
-  usedBy?: string;
+  usedBy?: {
+    id: string;
+    email: string;
+    name: string;
+  } | null;
   usedAt?: string;
   expiresAt?: string;
   isExpired: boolean;
@@ -382,21 +391,18 @@ export interface Review {
 
 export interface UpdateProgressRequest {
   lessonId: string;
-  completed: boolean;
+  completionStatus: CompletionStatus;
+  timeSpent?: number;
 }
 
 export interface ProgressUpdateResponse {
-  lessonProgress: {
-    id: string;
-    lessonId: string;
-    completed: boolean;
-    completedAt?: string;
-  };
-  courseProgress: {
-    progress: number;
-    completedLessons: number;
-    totalLessons: number;
-  };
+  id: string;
+  userId: string;
+  lessonId: string;
+  completionStatus: CompletionStatus;
+  timeSpent: number;
+  lastAccessed: string;
+  completedAt?: string;
 }
 
 export interface QuizAttemptRequest {

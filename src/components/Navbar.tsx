@@ -86,19 +86,26 @@ function Navbar() {
                   <span>📚</span> Mis Cursos
                 </Link>
               </li>
-              {user.role === 'INSTRUCTOR' && (
+              {(user.role === 'INSTRUCTOR' || user.role === 'ADMIN') && (
                 <li>
-                  <Link to="/instructor/courses">
+                  <Link to="/manage/courses">
                     <span>🎓</span> Gestionar Cursos
                   </Link>
                 </li>
               )}
               {user.role === 'ADMIN' && (
-                <li>
-                  <Link to="/admin/productos">
-                    <span>👑</span> Gestionar Productos
-                  </Link>
-                </li>
+                <>
+                  <li>
+                    <Link to="/admin/productos">
+                      <span>📦</span> Gestionar Productos
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/admin/usuarios">
+                      <span>👥</span> Gestionar Usuarios
+                    </Link>
+                  </li>
+                </>
               )}
               <div className="divider my-1"></div>
               <li>
@@ -177,19 +184,26 @@ function Navbar() {
                     <span>📚</span> Mis Cursos
                   </Link>
                 </li>
-                {user.role === 'INSTRUCTOR' && (
+                {(user.role === 'INSTRUCTOR' || user.role === 'ADMIN') && (
                   <li>
-                    <Link to="/instructor/courses">
+                    <Link to="/manage/courses">
                       <span>🎓</span> Gestionar Cursos
                     </Link>
                   </li>
                 )}
                 {user.role === 'ADMIN' && (
-                  <li>
-                    <Link to="/admin/productos">
-                      <span>👑</span> Gestionar Productos
-                    </Link>
-                  </li>
+                  <>
+                    <li>
+                      <Link to="/admin/productos">
+                        <span>📦</span> Gestionar Productos
+                      </Link>
+                    </li>
+                    <li>
+                      <Link to="/admin/usuarios">
+                        <span>👥</span> Gestionar Usuarios
+                      </Link>
+                    </li>
+                  </>
                 )}
                 <li>
                   <button onClick={handleLogout} className="text-error">

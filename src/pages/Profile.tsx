@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { authService } from '../api/services';
 import type { ApiError } from '../types/api';
 import { getRoleBadgeColor, getRoleText, getRoleIcon, getRoleDescription } from '../utils/roleUtils';
 
 export default function Profile() {
-  const { user, refreshUser } = useAuth();
+  const { user, refreshUser, logout } = useAuth();
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -25,6 +27,7 @@ export default function Profile() {
   });
 
   const [changingPassword, setChangingPassword] = useState(false);
+  const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -103,6 +106,30 @@ export default function Profile() {
       const apiError = err as ApiError;
       setError(apiError.error || 'Error al actualizar contraseña');
     } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    setError('');
+    setSuccess('');
+    setLoading(true);
+
+    try {
+      await authService.deleteAccount();
+      // Force logout and clear user state
+      try {
+        await logout();
+      } catch (logoutError) {
+        // Ignore logout errors since account is already deleted
+        console.error('Logout error after account deletion:', logoutError);
+      }
+      // Navigate to home
+      navigate('/', { replace: true });
+    } catch (err) {
+      const apiError = err as ApiError;
+      setError(apiError.error || 'Error al eliminar la cuenta');
+      setShowDeleteConfirmation(false);
       setLoading(false);
     }
   };
@@ -339,7 +366,7 @@ export default function Profile() {
         </div>
 
         {/* Change Password Card */}
-        <div className="card bg-base-100 shadow-xl">
+        <div className="card bg-base-100 shadow-xl mb-6">
           <div className="card-body p-4 md:p-8">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-6">
               <h2 className="card-title text-xl md:text-2xl">Cambiar Contraseña</h2>
@@ -436,6 +463,80 @@ export default function Profile() {
             )}
           </div>
         </div>
+
+        {/* Delete Account Card */}
+        <div className="card bg-base-100 shadow-xl border-2 border-error/20">
+          <div className="card-body p-4 md:p-8">
+            <h2 className="card-title text-xl md:text-2xl text-error">Zona Peligrosa</h2>
+            <div className="divider"></div>
+
+            <div className="space-y-4">
+              <div>
+                <h3 className="font-semibold text-lg mb-2">Eliminar Cuenta</h3>
+                <p className="text-sm sm:text-base text-base-content/70 mb-4">
+                  Una vez que elimines tu cuenta, no hay vuelta atrás. Por favor, estate seguro.
+                </p>
+                <button
+                  onClick={() => setShowDeleteConfirmation(true)}
+                  className="btn btn-error btn-outline w-full sm:w-auto"
+                  disabled={loading}
+                >
+                  Eliminar mi cuenta
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Delete Confirmation Modal */}
+        {showDeleteConfirmation && (
+          <div className="modal modal-open">
+            <div className="modal-box">
+              <h3 className="font-bold text-lg text-error mb-4">¿Eliminar tu cuenta?</h3>
+              <div className="alert alert-warning mb-4">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="stroke-current shrink-0 h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
+                </svg>
+                <span className="text-sm">Esta acción es permanente y no se puede deshacer.</span>
+              </div>
+              <p className="text-sm sm:text-base mb-6">
+                Se eliminarán todos tus datos, incluyendo:
+              </p>
+              <ul className="list-disc list-inside space-y-1 mb-6 text-sm">
+                <li>Información de perfil</li>
+                <li>Cursos inscritos</li>
+                <li>Progreso de aprendizaje</li>
+                <li>Certificados obtenidos</li>
+              </ul>
+              <div className="modal-action">
+                <button
+                  onClick={() => setShowDeleteConfirmation(false)}
+                  className="btn btn-ghost"
+                  disabled={loading}
+                >
+                  Cancelar
+                </button>
+                <button
+                  onClick={handleDeleteAccount}
+                  className={`btn btn-error ${loading ? 'loading' : ''}`}
+                  disabled={loading}
+                >
+                  Sí, eliminar mi cuenta
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

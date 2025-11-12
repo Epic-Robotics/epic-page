@@ -34,10 +34,12 @@ export interface ReorderFeaturesData {
 
 export const productService = {
   /**
-   * Get all published products (public)
+   * Get all products (public)
+   * @param includeAll - If true, includes both published and draft products
    */
-  getProducts: async (): Promise<Product[]> => {
-    return apiClient.get<Product[]>('/products');
+  getProducts: async (includeAll: boolean = false): Promise<Product[]> => {
+    const params = includeAll ? '?includeAll=true' : '';
+    return apiClient.get<Product[]>(`/products${params}`);
   },
 
   /**

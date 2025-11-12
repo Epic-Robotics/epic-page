@@ -1,5 +1,5 @@
 import apiClient from '../client';
-import type { Course, Section, UserProgress, QuizAttemptResponse, CourseLevel, AccessLink, Review, CreateReviewRequest } from '../../types/api';
+import type { Course, Section, UserProgress, QuizAttemptResponse, CourseLevel, AccessLink, AccessLinkInfo, Review, CreateReviewRequest } from '../../types/api';
 
 export interface CourseFilters {
   category?: string;
@@ -171,6 +171,27 @@ export const courseService = {
    */
   updateReview: async (courseId: string, data: CreateReviewRequest): Promise<Review> => {
     return apiClient.post<Review>(`/courses/${courseId}/review`, data);
+  },
+
+  /**
+   * Get access link info (public)
+   */
+  getAccessLinkInfo: async (token: string): Promise<AccessLinkInfo> => {
+    return apiClient.get<AccessLinkInfo>(`/access-links/${token}`);
+  },
+
+  /**
+   * Redeem access link and enroll (authenticated)
+   */
+  redeemAccessLink: async (token: string): Promise<{ message: string; enrollment: unknown }> => {
+    return apiClient.post<{ message: string; enrollment: unknown }>(`/access-links/redeem/${token}`);
+  },
+
+  /**
+   * Revoke access link (instructor: own courses / admin: any course)
+   */
+  revokeAccessLink: async (linkId: string): Promise<{ message: string }> => {
+    return apiClient.delete<{ message: string }>(`/access-links/${linkId}`);
   },
 };
 

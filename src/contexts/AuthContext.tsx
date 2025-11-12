@@ -83,8 +83,12 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
   };
 
   const logout = async (): Promise<void> => {
-    await authService.logout();
-    setUser(null);
+    try {
+      await authService.logout();
+    } finally {
+      // Always clear user state, even if API call fails
+      setUser(null);
+    }
   };
 
   const refreshUser = async (): Promise<void> => {
